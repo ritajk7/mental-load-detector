@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>فاحص الحمل الذهني</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 32px 16px;
+      color: #e5e7eb;
+      direction: rtl;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 900px;
+      background: #020617;
+      border-radius: 24px;
+      padding: 28px 32px 22px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+      border: 1px solid #1f2937;
+    }
+
+    .header {
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      margin: 0 0 6px;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: #f9fafb;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .section {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #111827;
+    }
+
+    .section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      margin: 0 0 4px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+
+    .section-desc {
+      margin: 0 0 10px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 18px;
+    }
+
+    @media (max-width: 600px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    input[type="number"],
+    select {
+      margin-top: 2px;
+      padding: 7px 9px;
+      border-radius: 10px;
+      border: 1px solid #374151;
+      font-size: 13px;
+      outline: none;
+      background: #020617;
+      color: #e5e7eb;
+      transition: border-color 0.15s ease, background-color 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    input[type="number"]::placeholder {
+      color: #4b5563;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+    }
+
+    .range-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #a855f7;
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    button {
+      align-self: flex-start;
+      padding: 9px 20px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.15s ease;
+      box-shadow: 0 14px 40px rgba(37, 99, 235, 0.6);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 50px rgba(37, 99, 235, 0.8);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #result {
+      margin-top: 4px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #374151;
+      display: none;
+      color: #e5e7eb;
+    }
+
+    #result small {
+      display: block;
+      margin-top: 3px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .info {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.7;
+      border-right: 1px solid #111827;
+      padding-right: 16px;
+    }
+
+    @media (max-width: 800px) {
+      .info {
+        border-right: none;
+        border-top: 1px solid #111827;
+        padding-right: 0;
+        padding-top: 12px;
+      }
+    }
+
+    .info-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #e5e7eb;
+    }
+
+    .info-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid #111827;
+      font-size: 11px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .footer strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <header class="header">
+      <h1 class="title">فاحص الحمل الذهني</h1>
+      <p class="subtitle">
+        أداة بسيطة تساعدك على تقدير حملك الذهني خلال اليوم بناءً على النوم، الدراسة، التوتر، والمزاج.
+      </p>
+    </header>
+
+    <div class="layout">
+      <!-- النموذج -->
+      <form id="form">
+        <!-- أساسيات اليوم -->
+        <section class="section">
+          <p class="section-title">أساسيات اليوم</p>
+          <p class="section-desc">أرقام تعبّر عن يومك من ناحية النوم، المذاكرة، والشاشة.</p>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>عدد ساعات النوم</label>
+              <input type="number" step="0.1" name="sleep_hours" placeholder="مثال: ٦.٥" required />
+              <span class="hint">إجمالي النوم الليلة الماضية.</span>
+            </div>
+
+            <div class="field">
+              <label>عدد ساعات المذاكرة / العمل</label>
+              <input type="number" step="0.1" name="study_hours" placeholder="مثال: ٣" required />
+              <span class="hint">وقت تركيز فعلي في الدراسة أو الشغل.</span>
+            </div>
+
+            <div class="field">
+              <label>مدة استخدام الشاشة (ساعات)</label>
+              <input type="number" step="0.1" name="screen_time_hours" placeholder="مثال: ٧" required />
+              <span class="hint">جوال + لابتوب خلال اليوم.</span>
+            </div>
+
+            <div class="field">
+              <label>عدد أكواب الكافيين</label>
+              <input type="number" step="1" name="caffeine_cups" placeholder="مثال: ٢" required />
+              <span class="hint">قهوة / شاي / مشروبات طاقة.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- كيف تحسين اليوم -->
+        <section class="section">
+          <p class="section-title">كيف تحسين اليوم</p>
+          <p class="section-desc">مقياس بسيط لمستوى التوتر والمزاج اليوم.</p>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>مستوى التوتر (من ١ إلى ٥)</label>
+              <div class="range-wrapper">
+                <input type="range" min="1" max="5" value="3" id="stressRange" />
+                <input type="number" min="1" max="5" name="stress_level_1_5" id="stressInput" value="3" required />
+                <div class="range-labels">
+                  <span>منخفض جداً</span>
+                  <span>مرتفع جداً</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>مستوى المزاج (من ١ إلى ٥)</label>
+              <div class="range-wrapper">
+                <input type="range" min="1" max="5" value="3" id="moodRange" />
+                <input type="number" min="1" max="5" name="mood_level_1_5" id="moodInput" value="3" required />
+                <div class="range-labels">
+                  <span>سيّئ</span>
+                  <span>إيجابي جداً</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- حمل اليوم -->
+        <section class="section">
+          <p class="section-title">حمل اليوم</p>
+          <p class="section-desc">نظرة عامة على مجهودك الجسدي والذهني.</p>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>هل مارستِ رياضة اليوم؟</label>
+              <select name="exercise_today" required>
+                <option value="1">نعم</option>
+                <option value="0" selected>لا</option>
+              </select>
+              <span class="hint">أي نشاط: مشي، جيم، تمارين بسيطة…</span>
+            </div>
+
+            <div class="field">
+              <label>هل كان عندك مهام ثقيلة اليوم؟</label>
+              <select name="heavy_tasks_today" required>
+                <option value="1">نعم</option>
+                <option value="0" selected>لا</option>
+              </select>
+              <span class="hint">مشاريع، اختبارات، ضغط عمل أو مسؤوليات كبيرة.</span>
+            </div>
+          <div class="actions">
+            <button type="submit" id="submit-btn">احسب الحمل الذهني</button>
+            <div id="result"></div>
+          </div>
+        </section>
+      </form>
+
+      <!-- النص التعريفي -->
+      <aside class="info">
+        <div>
+          <div class="info-title">عن الأداة</div>
+          <p>
+            هذه أداة تجريبية في علم البيانات. النموذج فيها تم تدريبه على بيانات يومية بحيث يقدّر مستوى الحمل
+            الذهني بناءً على النوم، المذاكرة، التوتر، المزاج، والأنشطة خلال اليوم.
+          </p>
+        </div>
+        <p class="info-note">
+          النتيجة ليست تشخيصاً طبياً، لكنها مؤشر يساعدك تلاحظين نمط يومك. تكرار نتيجة "حمل مرتفع" أو "عالي جداً"
+          ممكن يكون تلميح لمراجعة جدولك وفترات الراحة.
+        </p>
+      </aside>
+    </div>
+
+    <div class="footer">
+      تم برمجة وتطوير الموقع بواسطة
+      <strong>ريـتاج التركي</strong>
+    </div>
+  </div>
+
+  <script>
+    // مزامنة سلايدر التوتر مع حقل الرقم
+    const stressRange = document.getElementById("stressRange");
+    const stressInput = document.getElementById("stressInput");
+    const moodRange = document.getElementById("moodRange");
+    const moodInput = document.getElementById("moodInput");
+
+    stressRange.addEventListener("input", () => {
+      stressInput.value = stressRange.value;
+    });
+
+    stressInput.addEventListener("input", () => {
+      let v = Number(stressInput.value || 3);
+      if (v < 1) v = 1;
+      if (v > 5) v = 5;
+      stressInput.value = v;
+      stressRange.value = v;
+    });
+
+    moodRange.addEventListener("input", () => {
+      moodInput.value = moodRange.value;
+    });
+
+    moodInput.addEventListener("input", () => {
+      let v = Number(moodInput.value || 3);
+      if (v < 1) v = 1;
+      if (v > 5) v = 5;
+      moodInput.value = v;
+      moodRange.value = v;
+    });
+
+    // تحويل مستوى النموذج إلى نص عربي
+    function levelToArabic(level) {
+      if (level === 0) return "الحمل الذهني منخفض — يومك خفيف ومريح.";
+      if (level === 1) return "الحمل الذهني متوازن — وضعك مناسب لمذاكرة أو عمل عادي.";
+      if (level === 2) return "الحمل الذهني مرتفع — يفضل تضيفين فترات راحة وتخفيف ضغط.";
+      return "الحمل الذهني عالي جداً — الأفضل تهدئين، ترتاحين، وتخففين المهام اليوم.";
+    }
+
+    // إرسال البيانات للباك إند
+    const form = document.getElementById("form");
+    const resultBox = document.getElementById("result");
+    const submitBtn = document.getElementById("submit-btn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      Object.keys(data).forEach((key) => {
+        data[key] = Number(data[key]);
+      });
+
+      resultBox.style.display = "block";
+      resultBox.textContent = "جاري حساب الحمل الذهني…";
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const json = await response.json();
+
+        if (response.ok) {
+          const level = Number(json.level);
+          resultBox.innerHTML = `
+            <strong>${levelToArabic(level)}</strong>
+            <small>مستوى النموذج (لأغراض بحثية): ${level}</small>
+          `;
+        } else {
+          resultBox.textContent = "حدث خطأ أثناء الحساب.";
+        }
+      } catch (err) {
+        resultBox.textContent = "تعذر الاتصال بالخادم. تأكدي أن app.py يعمل.";
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
